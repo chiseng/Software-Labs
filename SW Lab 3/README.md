@@ -8,56 +8,56 @@ The alu design is made out of 4 components, an adder(bonus multiplier), a compar
 
 Schematic for adder
 
-![Adder](adder.png "adder")
+![Adder](adder.PNG "adder")
 
 Code for adder
 
-![Addercode](addercode.png "addercode")
+![Addercode](addercode.PNG "addercode")
 
 Results for adder
 
-![Addertable](addertable.png "addertable")
+![Addertable](addertable.PNG "addertable")
 
 
 <b>Compare</b>
 
 Logic for compare
 
-![Compare](compare.png "compare")
+![Compare](compare.PNG "compare")
 
 Code for compare
 
-![Comparecode](comparecode.png "comparecode")
+![Comparecode](comparecode.PNG "comparecode")
 
 Results for compare
 
-![Comparetable](comparetable.png "comparetable")
+![Comparetable](comparetable.PNG "comparetable")
 
 
 <b>Boolean</b>
 
 Schematic for boolean
 
-![Boolean](boolean.png "boolean")
+![Boolean](boolean.PNG "boolean")
 
 Code for boolean
 
-![Booleancode](booleancode.png "booleancode")
+![Booleancode](booleancode.PNG "booleancode")
 
 Results for boolean
 
-![Booleantable](booleantable.png "booleantable")
+![Booleantable](booleantable.PNG "booleantable")
 
 
 <b>Shifter</b>
 
 Schematic for shifter
 
-![Shifter](shifter.png "shifter")
+![Shifter](shifter.PNG "shifter")
 
 Code for shifter
 
-![Shiftercode](shiftercode.png "shiftercode")
+![Shiftercode](shiftercode.PNG "shiftercode")
 
 Results for shifter
 
@@ -68,10 +68,10 @@ Results for shifter
 
 Schematic for mutliplier
 
-![Multiplier](multiplier.png "multiplier")
+![Multiplier](multiplier.PNG "multiplier")
 
 Results for alu with multiplier
 
-![Multiplier](multiplier.png "multiplier")
+![Multiplier](multiplier.PNG "multiplier")
 
 P.S. to current term 4 peeps, please do not reference directly from the code but use the worksheet provided to get a rough idea of how it works/ask your friends to explain. This is intended as a way to compile my work for keepsake :)
