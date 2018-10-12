@@ -1,0 +1,77 @@
+.include "C:/Users/Me/Desktop/ISTD term 1/50002/nominal.jsim"
+.include "C:/Users/Me/Desktop/ISTD term 1/50002/8clocks.jsim"
+.include "C:/Users/Me/Desktop/ISTD term 1/50002/lab2checkoff.jsim"
+
+.subckt nand a b z
+
+MPD1 z a 1 0 NENH sw=8 sl=1
+MPD2 1 b 0 0 NENH sw=8 sl=1
+
+MPU1 z a vdd vdd PENH sw=8 sl=1
+MPU2 z b vdd vdd PENH sw=8 sl=1
+.ends
+
+.subckt nandsp a b c outed
+
+MPD1 2 c 0 0 NENH sw=8 sl=1
+MPD2 1 b 2 0 NENH sw=8 sl=1
+MPD3 outed a 1 0 NENH sw=8 sl=1
+
+MPU1 outed a vdd vdd PENH sw=8 sl=1
+MPU2 outed b vdd vdd PENH sw=8 sl=1
+MPU3 outed c vdd vdd PENH sw=8 sl=1
+
+.ends
+
+.subckt nor a b out
+
+MPD1 out a 0 0 NENH sw=8 sl=1
+MPD2 out b 0 0 NENH sw=8 sl=1
+
+MPU1 1 a vdd vdd PENH sw=8 sl=1
+MPU2 out b 1 vdd PENH sw=8 sl=1
+
+.ends
+
+.subckt xor a b z
+Xnor1 a b out nor
+MPD1 z a 1 0 NENH sw=8 sl=1 //topmost
+MPD2 1 b 0 0 NENH sw=8 sl=1 //2nd
+MPD3 z out 0 0 NENH sw=8 sl=1 //extra
+
+MPU1 z out 3 vdd PENH sw=8 sl=1
+MPU2 3 a vdd vdd PENH sw=8 sl=1
+MPU3 3 b vdd vdd PENH sw=8 sl=1
+
+.ends
+
+.options vih=2.6 vil=0.6
+
+.subckt FA a b ci s co 
+Xxor1 a b out1 xor
+Xxor2 out1 ci s xor
+Xnand1 a b out2 nand
+Xnand2 a ci out3 nand
+Xnand3 b ci out4 nand
+Xnand4 out2 out3 out4 co nandsp
+.ends
+
+.subckt ADDER4 a3 a2 a1 a0 b3 b2 b1 b0 s4 s3 s2 s1 s0
+* remember the node named "0" is the ground node
+* nodes c0 through c3 are internal to the ADDER module
+Xbit0 a0 b0 0 s0 c0 FA
+Xbit1 a1 b1 c0 s1 c1 FA
+Xbit2 a2 b2 c1 s2 c2 FA
+Xbit3 a3 b3 c2 s3 s4 FA
+.ends
+
+
+
+ 
+
+
+
+
+
+
+
