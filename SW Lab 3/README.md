@@ -9,7 +9,7 @@ The alu design is made out of 4 components, an adder(bonus multiplier), a compar
 
 ![ALU](alu.PNG "lab3")
 
-<b>Adder</b>
+#### Adder
 
 Schematic for adder
 
@@ -24,7 +24,7 @@ Results for adder
 ![Addertable](addertable.PNG "addertable")
 
 
-<b>Compare</b>
+#### Compare
 
 Logic for compare
 
@@ -39,7 +39,7 @@ Results for compare
 ![Comparetable](comparetable.PNG "comparetable")
 
 
-<b>Boolean</b>
+#### Boolean
 
 Schematic for boolean
 
@@ -54,7 +54,7 @@ Results for boolean
 ![Booleantable](booleantable.PNG "booleantable")
 
 
-<b>Shifter</b>
+#### Shifter
 
 Schematic for shifter
 
@@ -73,7 +73,7 @@ Results for shifter
 ![Shiftertable](shiftertable.PNG "shiftertable")
 
 
-<b>Multiplier</b>
+#### Multiplier
 
 Schematic for mutliplier
 
