@@ -47,7 +47,7 @@ Schematic for boolean
 
 Code for boolean
 
-![Booleancode](booleancode.PNG "booleancode")
+![Booleancode](boolecode.PNG "booleancode")
 
 Results for boolean
 
@@ -70,7 +70,7 @@ Code for shifter (1)
 
 Results for shifter
 
-![Shiftertable](shiftertable.png "shiftertable")
+![Shiftertable](shiftertable.PNG "shiftertable")
 
 
 <b>Multiplier</b>
