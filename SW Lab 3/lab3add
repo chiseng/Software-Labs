@@ -1,0 +1,182 @@
+.include "C:/Users/Me/Desktop/ISTD term 1/50002/nominal.jsim"
+.include "C:/Users/Me/Desktop/ISTD term 1/50002/stdcell.jsim"
+.include "C:/Users/Me/Desktop/ISTD term 1/50002/lab3checkoff_10.jsim"
+
+
+
+//1 bit adder
+.subckt FA A B C s co
+Xxor_1 A B AB xor2
+Xxor_2 C AB s xor2
+Xand_1 A B AandB and2
+Xand_2 C AB AandB2 and2
+Xor_ AandB AandB2 co or2
+.ends
+
+//V flag
+.subckt vflag A B S v
+XinvertA A Ainv inverter
+XinvertB B Binv inverter
+XinvertS S Sinv inverter 
+Xand1 A B Sinv combo1 and3
+Xand2 Ainv Binv S combo2 and3
+Xor1 combo1 combo2 v or2
+.ends
+
+//Z flag
+.subckt zflag in[31:0] out 
+Xor1 in[0:7] in[8:15] in[16:23] in[24:31] out1[7:0] or4
+Xor2 out1[0:1] out1[2:3] out1[4:5] out1[6:7] out2[1:0] or4
+Xnor1 out2[0] out2[1] out nor2
+.ends
+
+//Full 32 bit adder
+.subckt adder32 ALUFN[0] A[31:0] B[31:0] s[31:0] z v n
+Xxor_32 ALUFN[0]#32 NB[31:0] NB[31:0] xor2
+Xfa32_1 A[0] B[0] ALUFN[0] s[0] co[0] FA
+Xfa32 A[31:1] NB[31:1] co[30:0] s[31:1] co[31:1] FA
+Xoverflow A[31] NB[31] s[31] v vflag
+Xzflag s[31:0] z zflag
+.connect s[31] n
+.ends 
+
+//32bit compare
+.subckt compare32 ALUFN[2:1] z v n cmp[31:0]
+.connect cmp[31:1] 0
+Xless v n out1 xor2
+Xlesseq z out1 out3 or2
+Xmuxx ALUFN[2] ALUFN[1] 0 out1 z out3 cmp[0] mux4
+.ends
+
+//32 bit boole
+.subckt boole32 ALUFN[3:0] A[31:0] B[31:0] boole[31:0]
+Xmuxxx A[31:0] B[31:0] ALUFN[0]#32 ALUFN[1]#32 ALUFN[2]#32 ALUFN[3]#32 boole[31:0] mux4
+.ends 
+
+//32 bit shifter
+.subckt shift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0]
+//shift left
+XshiftleftW B[4]#16 A[31:16] A[15:0] W[31:16] mux2
+XshiftleftWW B[4]#16 A[15:0] 0#16 W[15:0] mux2
+
+XshiftleftX B[3]#24 W[31:8] W[23:0] X[31:8] mux2 
+XshiftleftXX B[3]#8 W[7:0] 0#8 X[7:0] mux2
+
+XshiftleftY B[2]#28 X[31:4] X[27:0] Y[31:4] mux2
+XshiftleftYY B[2]#4 X[3:0] 0#4 Y[3:0] mux2
+
+XshiftleftZ B[1]#30 Y[31:2] Y[29:0] Z[31:2] mux2
+XshiftleftZZ B[1]#2 Y[1:0] 0#2 Z[1:0] mux2
+
+XshiftSL B[0]#31 Z[31:1] Z[30:0] SL[31:1] mux2
+XshiftSLL B[0] Z[0] 0 SL[0] mux2
+
+Xshiftdecider ALUFN[1] 0 A[31] as mux2
+
+//shift right
+XshiftRW B[4]#16 A[15:0] A[31:16] WN[15:0] mux2
+XshiftRW_new B[4]#16 A[31:16] as#16 WN[31:16] mux2
+
+XshiftRx B[3]#24 WN[23:0] WN[31:8]  XN[23:0] mux2 
+XshiftRx_new B[3]#8 WN[31:24] as#8 XN[31:24] mux2
+
+XshiftRy B[2]#28 XN[27:0] XN[31:4] YN[27:0] mux2
+XshiftRy_new B[2]#4 XN[31:28] as#4 YN[31:28] mux2
+
+XshiftRz B[1]#30 YN[29:0] YN[31:2] ZN[29:0] mux2
+XshiftRz_new B[1]#2 YN[31:30] as#2 ZN[31:30] mux2
+
+XshiftRsr B[0]#31 ZN[30:0] ZN[31:1] SR[30:0] mux2
+XshiftRsr_new B[0] ZN[31] as SR[31] mux2
+
+
+Xshift ALUFN[0]#32 SL[31:0] SR[31:0] shift[31:0] mux2
+.ends
+  
+//multiplier
+.subckt multiplier A[31:0] B[31:0] alu[31:0]
+Xand1 A[31:0] B[0]#32 andA[31:0] and2
+Xand2 A[31:0] B[1]#32 andB[31:0] and2
+Xand3 A[31:0] B[2]#32 andC[31:0] and2
+Xand4 A[31:0] B[3]#32 andD[31:0] and2
+Xand5 A[31:0] B[4]#32 andE[31:0] and2
+Xand6 A[31:0] B[5]#32 andF[31:0] and2
+Xand7 A[31:0] B[6]#32 andG[31:0] and2
+Xand8 A[31:0] B[7]#32 andH[31:0] and2
+Xand9 A[31:0] B[8]#32 andI[31:0] and2
+Xand10 A[31:0] B[9]#32 andJ[31:0] and2
+Xand11 A[31:0] B[10]#32 andK[31:0] and2
+Xand12 A[31:0] B[11]#32 andL[31:0] and2
+Xand13 A[31:0] B[12]#32 andM[31:0] and2
+Xand14 A[31:0] B[13]#32 andN[31:0] and2
+Xand15 A[31:0] B[14]#32 andO[31:0] and2
+Xand16 A[31:0] B[15]#32 andP[31:0] and2
+Xand17 A[31:0] B[16]#32 andQ[31:0] and2
+Xand18 A[31:0] B[17]#32 andR[31:0] and2
+Xand19 A[31:0] B[18]#32 andS[31:0] and2
+Xand20 A[31:0] B[19]#32 andT[31:0] and2
+Xand21 A[31:0] B[20]#32 andU[31:0] and2
+Xand22 A[31:0] B[21]#32 andV[31:0] and2
+Xand23 A[31:0] B[22]#32 andW[31:0] and2
+Xand24 A[31:0] B[23]#32 andX[31:0] and2
+Xand25 A[31:0] B[24]#32 andY[31:0] and2
+Xand26 A[31:0] B[25]#32 andZ[31:0] and2
+Xand27 A[31:0] B[26]#32 andAA[31:0] and2
+Xand28 A[31:0] B[27]#32 andAB[31:0] and2
+Xand29 A[31:0] B[28]#32 andAC[31:0] and2
+Xand30 A[31:0] B[29]#32 andAD[31:0] and2
+Xand31 A[31:0] B[30]#32 andAE[31:0] and2
+Xand32 A[31:0] B[31]#32 andAF[31:0] and2
+Xfa1 andA[31:0] andB[30:0] 0 cA[30:0] 0 sumA[31:0] cA[31:0] FA
+Xfa2 sumA[31:0] andC[29:0] 0#2 cB[30:0] 0 sumB[31:0] cB[31:0] FA
+Xfa3 sumB[31:0] andD[28:0] 0#3 cC[30:0] 0 sumC[31:0] cC[31:0] FA
+Xfa4 sumC[31:0] andE[27:0] 0#4 cD[30:0] 0 sumD[31:0] cD[31:0] FA
+Xfa5 sumD[31:0] andF[26:0] 0#5 cE[30:0] 0 sumE[31:0] cE[31:0] FA
+Xfa6 sumE[31:0] andG[25:0] 0#6 cF[30:0] 0 sumF[31:0] cF[31:0] FA
+Xfa7 sumF[31:0] andH[24:0] 0#7 cG[30:0] 0 sumG[31:0] cG[31:0] FA
+Xfa8 sumG[31:0] andI[23:0] 0#8 cH[30:0] 0 sumH[31:0] cH[31:0] FA
+Xfa9 sumH[31:0] andJ[22:0] 0#9 cI[30:0] 0 sumI[31:0] cI[31:0] FA
+Xfa10 sumI[31:0] andK[21:0] 0#10 cJ[30:0] 0 sumJ[31:0] cJ[31:0] FA
+Xfa11 sumJ[31:0] andL[20:0] 0#11 cK[30:0] 0 sumK[31:0] cK[31:0] FA
+Xfa12 sumK[31:0] andM[19:0] 0#12 cL[30:0] 0 sumL[31:0] cL[31:0] FA
+Xfa13 sumL[31:0] andN[18:0] 0#13 cM[30:0] 0 sumM[31:0] cM[31:0] FA
+Xfa14 sumM[31:0] andO[17:0] 0#14 cN[30:0] 0 sumN[31:0] cN[31:0] FA
+Xfa15 sumN[31:0] andP[16:0] 0#15 cO[30:0] 0 sumO[31:0] cO[31:0] FA
+Xfa16 sumO[31:0] andQ[15:0] 0#16 cP[30:0] 0 sumP[31:0] cP[31:0] FA
+Xfa17 sumP[31:0] andR[14:0] 0#17 cQ[30:0] 0 sumQ[31:0] cQ[31:0] FA
+Xfa18 sumQ[31:0] andS[13:0] 0#18 cR[30:0] 0 sumR[31:0] cR[31:0] FA
+Xfa19 sumR[31:0] andT[12:0] 0#19 cS[30:0] 0 sumS[31:0] cS[31:0] FA
+Xfa20 sumS[31:0] andU[11:0] 0#20 cT[30:0] 0 sumT[31:0] cT[31:0] FA
+Xfa21 sumT[31:0] andV[10:0] 0#21 cU[30:0] 0 sumU[31:0] cU[31:0] FA
+Xfa22 sumU[31:0] andW[9:0] 0#22 cV[30:0] 0 sumV[31:0] cV[31:0] FA
+Xfa23 sumV[31:0] andX[8:0] 0#23 cW[30:0] 0 sumW[31:0] cW[31:0] FA
+Xfa24 sumW[31:0] andY[7:0] 0#24 cX[30:0] 0 sumX[31:0] cX[31:0] FA
+Xfa25 sumX[31:0] andZ[6:0] 0#25 cY[30:0] 0 sumY[31:0] cY[31:0] FA
+Xfa26 sumY[31:0] andAA[5:0] 0#26 cZ[30:0] 0 sumZ[31:0] cZ[31:0] FA
+Xfa27 sumZ[31:0] andAB[4:0] 0#27 cAA[30:0] 0 sumAA[31:0] cAA[31:0] FA
+Xfa28 sumAA[31:0] andAC[3:0] 0#28 cAB[30:0] 0 sumAB[31:0] cAB[31:0] FA
+Xfa29 sumAB[31:0] andAD[2:0] 0#29 cAC[30:0] 0 sumAC[31:0] cAC[31:0] FA
+Xfa30 sumAC[31:0] andAE[1:0] 0#30 cAD[30:0] 0 sumAD[31:0] cAD[31:0] FA
+Xfa31 sumAD[31:0] andAF[0] 0#31 cAE[30:0] 0 alu[31:0] cAE[31:0] FA
+.ends
+
+//32 bit ALU
+.subckt alu ALUFN[5:0] A[31:0] B[31:0] alu[31:0] z v n
+X32_adder ALUFN[0] A[31:0] B[31:0] s[31:0] z v n adder32
+X32_compare ALUFN[2:1] z v n cmp[31:0] compare32
+X32_boole ALUFN[3:0] A[31:0] B[31:0] boole[31:0] boole32
+X32_shifter ALUFN[1:0] A[31:0] B[4:0] shift[31:0] shift32
+X32_multiplex A[31:0] B[31:0] MUL[31:0] multiplier
+
+//switch multiplexer
+Xmuxx1 ALUFN[1]#32 s[31:0] MUL[31:0] A_M[31:0] mux2
+
+X32_muxx0 ALUFN[4]#32 ALUFN[5]#32 A_M[31:0] boole[31:0] shift[31:0] cmp[31:0] alu[31:0] mux4
+.ends
+
+
+
+
+
+
+
