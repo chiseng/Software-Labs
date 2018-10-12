@@ -8,5 +8,5 @@ In this lab made a full bit adder out of CMOS circuits, and combined it with thr
 
 ## Adder Results
 
-![Addertruth](Lab2.PNG "addd")
+![Addertruth](lab2.PNG "addd")
 
